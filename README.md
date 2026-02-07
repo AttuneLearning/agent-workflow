@@ -52,6 +52,12 @@ claude-dev-workflow/
 │   ├── post-implementation.md
 │   └── test-reminder.md
 │
+├── team-configs/           # Agent team configurations (shared)
+│   ├── code-reviewer-config.json     # QA/Architect code gate
+│   ├── agent-team-roles.json         # Agent team role definitions
+│   ├── agent-team-hooks-guide.md     # Hook setup documentation
+│   └── README.md                     # Config manifest
+│
 ├── templates/              # Templates for new items
 │   ├── pattern-template.md
 │   ├── adr-template.md
@@ -59,7 +65,7 @@ claude-dev-workflow/
 │
 ├── scaffolds/              # Directory scaffolds
 │   ├── dev_communication/  # Inter-team communication hub
-│   └── memory/             # Extended memory vault
+│   └── memory/             # Extended memory vault (includes team-configs/)
 │
 ├── SETUP.md                # Setup instructions
 ├── setup.sh                # Automated setup script
@@ -106,6 +112,15 @@ Extended memory vault with:
 - Entities (system components)
 - Patterns (conventions)
 - Sessions (summaries)
+- Team configs (learned team compositions from Phase 4 reviews)
+
+### team-configs/
+
+Shared agent team configurations (via submodule):
+- Code reviewer gate config (Opus 4.6)
+- Agent team role definitions (lead + implementer/tester/researcher)
+- Hook setup documentation
+- See `team-configs/README.md` for full manifest
 
 ## Updates
 

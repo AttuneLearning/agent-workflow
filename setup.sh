@@ -99,6 +99,55 @@ else
     fi
 fi
 
+# Ask about agent teams
+echo ""
+echo "Agent Teams Setup"
+echo "-----------------"
+read -p "Enable Claude Code agent teams? (adds hooks + team-configs) [y/N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    # Create hooks directory
+    mkdir -p .claude/hooks
+    echo "  Created .claude/hooks/"
+
+    # Create memory/team-configs if not exists
+    if [ -d "memory" ] && [ ! -d "memory/team-configs" ]; then
+        if [ -d "$SCRIPT_DIR/scaffolds/memory/team-configs" ]; then
+            cp -r "$SCRIPT_DIR/scaffolds/memory/team-configs" memory/team-configs
+            echo "  Created memory/team-configs/ from scaffold"
+        else
+            mkdir -p memory/team-configs
+            echo "  Created memory/team-configs/"
+        fi
+    fi
+
+    echo ""
+    echo "  Agent teams enabled. Next steps for hooks:"
+    echo "  1. Create .claude/hooks/task-completed.sh (see .claude-workflow/team-configs/agent-team-hooks-guide.md)"
+    echo "  2. Create .claude/hooks/teammate-idle.sh"
+    echo "  3. chmod +x .claude/hooks/*.sh"
+    echo "  4. Add env + hooks config to .claude/settings.json (see SETUP.md Step 7)"
+fi
+
+# Archive legacy configs if found
+LEGACY_CONFIGS=$(ls .claude/team-config*.json .claude/bug-fix-team-config*.json 2>/dev/null || true)
+if [ -n "$LEGACY_CONFIGS" ]; then
+    echo ""
+    echo "Legacy Config Migration"
+    echo "-----------------------"
+    echo "Found legacy team configs in .claude/:"
+    echo "$LEGACY_CONFIGS"
+    read -p "Archive them to .claude/archive/? [y/N] " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        mkdir -p .claude/archive
+        for f in $LEGACY_CONFIGS; do
+            mv "$f" .claude/archive/
+            echo "  Archived: $(basename "$f")"
+        done
+    fi
+fi
+
 echo ""
 echo "Setup Complete!"
 echo ""
@@ -107,5 +156,8 @@ echo "1. Review .claude/settings.json"
 echo "2. Add workflow section to CLAUDE.md (see SETUP.md)"
 echo "3. Initialize team status in dev_communication/coordination/"
 echo "4. Create initial context in memory/context/"
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "5. Set up agent team hooks (see SETUP.md Step 7)"
+fi
 echo ""
 echo "Available skills: /comms /adr /memory /recall /context /reflect /refine"

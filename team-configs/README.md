@@ -24,15 +24,28 @@ These files live in each project repo (not in the submodule) because they contai
 | `skills/traverse-architecture/SKILL.md` | Architecture analysis skill | Project-specific |
 | `commands/` | Symlinks to `.claude-workflow/skills/` | Connects submodule skills to project |
 
-## Legacy Files (`.claude/`)
+## Learned Team Configs (`memory/team-configs/`)
 
-These are older team configs that predate the current `/develop` lifecycle. They are not actively used but preserved for reference:
+Project-specific directory storing team compositions learned from Phase 4 reviews:
+
+| File | Purpose |
+|------|---------|
+| `_template.json` | Template for new learned config entries |
+| `{issue-type}--{qualifier}.json` | Learned configs (one per significant review) |
+| `index.md` | Directory overview and lookup strategy |
+
+Phase 1.5 (Team Selection) reads these to match past effective configs to new issues.
+Phase 4 (Documentation) promotes successful configs here when effectiveness is "excellent" or "good".
+
+## Legacy Files (`.claude/archive/`)
+
+Older team configs archived from `.claude/`. Superseded by the agent team roles + preset system:
 
 | File | Status |
 |------|--------|
-| `team-config.json` | Superseded by /develop skill + code-reviewer-config |
-| `team-config.backup.json` | Backup of earlier config |
+| `team-config.json` | Superseded by agent-team-roles.json |
+| `team-config.backup.json` | Archived |
 | `team-config.old.json` | Archived |
-| `team-config-ui-auth.json` | Auth-specific config (archived) |
-| `team-config-learning-unit-ui.json` | Learning unit config (archived) |
-| `bug-fix-team-config.json` | Bug fix config (archived) |
+| `team-config-ui-auth.json` | Archived (covered by presets) |
+| `team-config-learning-unit-ui.json` | Archived (covered by presets) |
+| `bug-fix-team-config.json` | Archived (covered by bugFix pattern) |

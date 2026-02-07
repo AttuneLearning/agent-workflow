@@ -214,9 +214,11 @@ Runs after context loading, before implementation. Selects the best team preset.
 
 **Steps:**
 1. Analyze issue scope (file count, FSD layers, dependencies)
-2. Search past `memory/sessions/` for `## Team Review` sections on similar issues
-3. Match against `teamPresets.selectWhen` in `agent-team-roles.json`
-4. Log selection rationale
+2. Search `memory/team-configs/` for learned configs matching issue type
+3. Search past `memory/sessions/` for `## Team Review` sections on similar issues
+4. If learned config exists with "excellent"/"good" rating, prefer it
+5. Otherwise match against `teamPresets.selectWhen` in `agent-team-roles.json`
+6. Log selection rationale
 
 ---
 
@@ -317,6 +319,12 @@ npm run test:integration
    - Write `## Team Review` section in session file
    - This feeds into Phase 1.5 for future team selection
 
+6. **Promote to learned config** (when team was effective)
+   - If effectiveness was "excellent" or "good", create config in `memory/team-configs/`
+   - Use template: `memory/team-configs/_template.json`
+   - Name: `{issue-type}--{qualifier}.json`
+   - Makes config directly searchable by Phase 1.5
+
 ---
 
 ### Phase 5: Completion
@@ -398,10 +406,11 @@ dev_communication/
     └── dependencies.md  # Cross-team blockers
 
 memory/
-├── patterns/   # Development patterns
-├── entities/   # Component/entity docs
-├── context/    # Domain knowledge
-└── sessions/   # Session summaries
+├── patterns/      # Development patterns
+├── entities/      # Component/entity docs
+├── context/       # Domain knowledge
+├── sessions/      # Session summaries
+└── team-configs/  # Learned team compositions (promoted from Phase 4 reviews)
 
 dev_communication/architecture/
 ├── decisions/  # ADRs
@@ -437,3 +446,4 @@ issues     = dev_communication/issues/{team}/
 - **Code Reviewer:** `.claude-workflow/team-configs/code-reviewer-config.json`
 - **Agent Team Roles:** `.claude-workflow/team-configs/agent-team-roles.json`
 - **Agent Team Hooks:** `.claude-workflow/team-configs/agent-team-hooks-guide.md`
+- **Learned Team Configs:** `memory/team-configs/` (structured lookup for Phase 1.5)

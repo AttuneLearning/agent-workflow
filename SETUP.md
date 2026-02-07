@@ -166,6 +166,11 @@ your-project/
 │   │   ├── comms.md -> ../../.claude-workflow/skills/comms.md
 │   │   ├── adr.md -> ...
 │   │   └── ...
+│   ├── hooks/              # Quality gate hooks (agent teams)
+│   │   ├── task-completed.sh
+│   │   └── teammate-idle.sh
+│   ├── archive/            # Legacy configs (if upgrading)
+│   ├── skills/develop/     # Project-local /develop skill
 │   └── settings.json
 ├── .claude-workflow/       # Git submodule
 │   ├── skills/
@@ -183,7 +188,8 @@ your-project/
 │   ├── context/
 │   ├── entities/
 │   ├── patterns/
-│   └── sessions/
+│   ├── sessions/
+│   └── team-configs/       # Learned team compositions
 └── CLAUDE.md
 ```
 
@@ -214,6 +220,120 @@ cd ..
 git add .claude-workflow
 git commit -m "Update claude-dev-workflow submodule"
 ```
+
+### Step 7: Agent Teams Setup (Optional)
+
+Enable Claude Code experimental agent teams for parallel development with the `/develop team` workflow.
+
+#### 7a. Enable Agent Teams
+
+Add to `.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}
+```
+
+#### 7b. Install Quality Gate Hooks
+
+Create `.claude/hooks/` directory and add the hook scripts:
+
+```bash
+mkdir -p .claude/hooks
+
+# Copy hook scripts from the submodule guide or create per:
+# .claude-workflow/team-configs/agent-team-hooks-guide.md
+```
+
+Add hook wiring to `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/task-completed.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/teammate-idle.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Make hooks executable:
+
+```bash
+chmod +x .claude/hooks/task-completed.sh
+chmod +x .claude/hooks/teammate-idle.sh
+```
+
+#### 7c. Create Learned Team Configs Directory
+
+```bash
+mkdir -p memory/team-configs
+```
+
+Or if setting up from scaffolds:
+
+```bash
+cp -r .claude-workflow/scaffolds/memory/team-configs memory/team-configs
+```
+
+This directory stores learned team compositions from Phase 4 reviews. Phase 1.5 (Team Selection) reads these to inform future preset choices.
+
+#### 7d. Archive Legacy Configs (If Upgrading)
+
+If you have legacy team configs in `.claude/` (e.g., `team-config.json`, `team-config-*.json`):
+
+```bash
+mkdir -p .claude/archive
+mv .claude/team-config*.json .claude/archive/
+mv .claude/bug-fix-team-config*.json .claude/archive/
+```
+
+These are superseded by `.claude-workflow/team-configs/agent-team-roles.json` and the preset system.
+
+#### 7e. Verify Setup
+
+```bash
+# Check jq is available (hooks depend on it)
+which jq
+
+# Verify hooks are executable
+ls -la .claude/hooks/
+
+# Verify settings.json is valid
+python3 -c "import json; json.load(open('.claude/settings.json'))"
+
+# Test hook with dry run
+echo '{"task_subject":"test","cwd":"'$(pwd)'"}' | .claude/hooks/task-completed.sh
+```
+
+**References:**
+- Hook setup details: `.claude-workflow/team-configs/agent-team-hooks-guide.md`
+- Agent team roles: `.claude-workflow/team-configs/agent-team-roles.json`
+- Code review gate: `.claude-workflow/team-configs/code-reviewer-config.json`
+
+---
 
 ## Customization
 

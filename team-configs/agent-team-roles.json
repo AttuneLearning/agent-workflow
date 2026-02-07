@@ -185,8 +185,16 @@
       "Identify what preset would have been ideal in hindsight",
       "Check: did the task dependency pattern match the actual flow?",
       "Record timing: how long did each teammate's tasks take?",
-      "Write team review to session file under ## Team Review section"
+      "Write team review to session file under ## Team Review section",
+      "If effectiveness was excellent/good, promote to memory/team-configs/ using _template.json"
     ],
+    "learnedConfigStorage": {
+      "directory": "memory/team-configs/",
+      "template": "memory/team-configs/_template.json",
+      "naming": "{issue-type}--{qualifier}.json",
+      "promoteWhen": "effectiveness is excellent or good",
+      "purpose": "Structured lookup for Phase 1.5 team selection, avoids parsing session prose"
+    },
     "sessionFileAddition": {
       "section": "## Team Review",
       "fields": [
