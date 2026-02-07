@@ -84,6 +84,122 @@
     }
   },
 
+  "teamPresets": {
+    "solo": {
+      "description": "Single agent, no team. Default for simple issues.",
+      "teammates": [],
+      "selectWhen": [
+        "Issue touches 1-2 files",
+        "Simple bug fix or typo",
+        "Documentation-only change",
+        "Quick mode eligible"
+      ]
+    },
+    "paired": {
+      "description": "Lead + implementer. For focused implementation work.",
+      "teammates": ["implementer"],
+      "selectWhen": [
+        "Issue touches 2-4 files in same FSD layer",
+        "Straightforward feature addition",
+        "Tests already exist and just need updating",
+        "Bug fix requiring moderate investigation"
+      ]
+    },
+    "standard": {
+      "description": "Lead + implementer + tester. Default team mode.",
+      "teammates": ["implementer", "tester"],
+      "selectWhen": [
+        "Issue requires new code AND new tests",
+        "Feature spans 3+ files across FSD layers",
+        "Acceptance criteria include test requirements",
+        "Most /develop team invocations"
+      ]
+    },
+    "research": {
+      "description": "Lead + researcher + implementer + tester. For complex unknowns.",
+      "teammates": ["researcher", "implementer", "tester"],
+      "selectWhen": [
+        "Issue involves unfamiliar parts of codebase",
+        "Architecture decision needed before implementation",
+        "Cross-team dependency or integration point",
+        "No existing patterns in memory/ match the task"
+      ]
+    },
+    "parallel-impl": {
+      "description": "Lead + 2 implementers + tester. For multi-component features.",
+      "teammates": ["implementer", "implementer", "tester"],
+      "selectWhen": [
+        "Issue has multiple independent components",
+        "Changes span distinct FSD layers (e.g., entity + widget + page)",
+        "Components can be built in parallel without file conflicts",
+        "Large feature with natural component boundaries"
+      ]
+    }
+  },
+
+  "teamSelection": {
+    "phase": "Phase 1.5 - runs after context loading, before implementation",
+    "steps": [
+      "Read issue requirements and acceptance criteria",
+      "Count files likely to be created/modified",
+      "Check if patterns exist in memory/ for this type of work",
+      "Assess complexity: simple (1-2 files), moderate (3-5 files), complex (6+ files)",
+      "Check if issue has cross-team dependencies",
+      "Match against teamPresets.selectWhen criteria",
+      "Select best preset (default: standard for team mode, solo for normal mode)",
+      "Log selection rationale"
+    ],
+    "overrides": {
+      "userExplicit": "User can specify preset: /develop team:research UI-ISS-082",
+      "leadJudgment": "Lead can override preset during Phase 2T review checkpoint"
+    }
+  },
+
+  "midDevReview": {
+    "phase": "Phase 2T checkpoint - runs after 50% of tasks complete",
+    "triggers": [
+      "Half of team tasks marked complete",
+      "Any teammate blocked by hooks 2+ times consecutively",
+      "Teammate sends message indicating scope change",
+      "30 minutes elapsed since team spawn"
+    ],
+    "actions": [
+      "Assess progress: are tasks completing on schedule?",
+      "Check for scope creep: has the issue grown beyond original plan?",
+      "Evaluate teammate effectiveness: any teammate idle too long or struggling?",
+      "Decide: add teammate, remove teammate, reassign tasks, or continue as-is",
+      "If adding: spawn new teammate with remaining task context",
+      "If removing: shut down underperforming teammate, reassign their tasks",
+      "If scope changed: create new tasks, adjust dependencies",
+      "Log review decision and rationale"
+    ]
+  },
+
+  "postDevReview": {
+    "phase": "Phase 4 - runs during documentation, after implementation complete",
+    "purpose": "Review team config effectiveness and record adjustments for future similar issues",
+    "steps": [
+      "Compare actual team composition to selected preset",
+      "Record which teammates were most/least effective",
+      "Note if mid-dev review changed the team composition",
+      "Identify what preset would have been ideal in hindsight",
+      "Check: did the task dependency pattern match the actual flow?",
+      "Record timing: how long did each teammate's tasks take?",
+      "Write team review to session file under ## Team Review section"
+    ],
+    "sessionFileAddition": {
+      "section": "## Team Review",
+      "fields": [
+        "Preset selected: {preset_name}",
+        "Preset ideal: {ideal_preset_name} (same or different)",
+        "Teammates spawned: {list}",
+        "Mid-dev adjustments: {none | added X | removed X | reassigned Y}",
+        "Bottlenecks: {description or none}",
+        "Recommendation: {use same preset | try different preset} for similar issues"
+      ]
+    }
+  },
+
   "taskDependencyPatterns": {
     "newFeature": {
       "description": "Standard feature implementation with tests",
