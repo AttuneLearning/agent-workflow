@@ -58,7 +58,6 @@ mkdir -p .claude/commands
 ln -sf ../../.claude-workflow/skills/comms.md .claude/commands/comms.md
 ln -sf ../../.claude-workflow/skills/adr.md .claude/commands/adr.md
 ln -sf ../../.claude-workflow/skills/memory.md .claude/commands/memory.md
-ln -sf ../../.claude-workflow/skills/recall.md .claude/commands/recall.md
 
 # Workflow skills
 ln -sf ../../.claude-workflow/skills/context.skill.md .claude/commands/context.md
@@ -93,7 +92,6 @@ Add to your project's `CLAUDE.md`:
 - `/comms` - Inter-team communication
 - `/adr` - Architecture decisions
 - `/memory` - Memory vault management
-- `/recall` - Quick context loading
 - `/context` - Pre-implementation context
 - `/reflect` - Post-implementation reflection
 - `/refine` - Pattern refinement
@@ -169,14 +167,15 @@ your-project/
 │   ├── hooks/              # Quality gate hooks (agent teams)
 │   │   ├── task-completed.sh
 │   │   └── teammate-idle.sh
+│   ├── team-configs/        # Local overrides (non-frontend projects only)
 │   ├── archive/            # Legacy configs (if upgrading)
-│   ├── skills/develop/     # Project-local /develop skill
 │   └── settings.json
 ├── .claude-workflow/       # Git submodule
 │   ├── skills/
 │   ├── patterns/
 │   ├── indexes/
 │   ├── hooks/
+│   ├── team-configs/       # Shared agent team configs (override in .claude/team-configs/)
 │   ├── templates/
 │   └── scaffolds/
 ├── dev_communication/      # Copied from scaffold (or symlinked)
@@ -223,7 +222,7 @@ git commit -m "Update claude-dev-workflow submodule"
 
 ### Step 7: Agent Teams Setup (Optional)
 
-Enable Claude Code experimental agent teams for parallel development with the `/develop team` workflow.
+Enable Claude Code experimental agent teams for parallel development.
 
 #### 7a. Enable Agent Teams
 
@@ -312,7 +311,27 @@ mv .claude/bug-fix-team-config*.json .claude/archive/
 
 These are superseded by `.claude-workflow/team-configs/agent-team-roles.json` and the preset system.
 
-#### 7e. Verify Setup
+#### 7e. Create Local Overrides (Non-Frontend Projects)
+
+If your project is NOT a frontend/React project, create local overrides of the team configs:
+
+```bash
+mkdir -p .claude/team-configs
+
+# Copy submodule configs as starting point
+cp .claude-workflow/team-configs/agent-team-roles.json .claude/team-configs/
+cp .claude-workflow/team-configs/code-reviewer-config.json .claude/team-configs/
+```
+
+Then edit the copied files to swap:
+- Architecture pattern (FSD → your layers)
+- Test framework (Vitest/RTL → Jest/supertest/etc.)
+- Framework-specific checks (shadcn/ARIA → your conventions)
+- Test/coverage commands
+
+See `.claude-workflow/team-configs/README.md` for a detailed override guide.
+
+#### 7f. Verify Setup
 
 ```bash
 # Check jq is available (hooks depend on it)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Quality gate hooks that enforce code-reviewer-config.json criteria when agent teams are active during `/develop`. These hooks run automatically via Claude Code's hook system - they are NOT advisory markdown files.
+Quality gate hooks that enforce code-reviewer-config.json criteria when agent teams are active. These hooks run automatically via Claude Code's hook system - they are NOT advisory markdown files.
 
 ## Hook Scripts
 

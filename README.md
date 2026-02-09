@@ -4,7 +4,7 @@ A comprehensive development workflow system for Claude Code projects.
 
 ## Features
 
-- **Skills** - Reusable commands (`/comms`, `/adr`, `/memory`, `/recall`, `/context`, `/reflect`, `/refine`)
+- **Skills** - Reusable commands (`/comms`, `/adr`, `/memory`, `/context`, `/reflect`, `/refine`)
 - **Patterns** - Code patterns with token-optimized format
 - **Indexes** - Fast lookup for ADRs, patterns, and work types
 - **Hooks** - Advisory reminders (pre/post implementation, testing)
@@ -32,7 +32,6 @@ claude-dev-workflow/
 │   ├── comms.md            # Inter-team communication
 │   ├── adr.md              # Architecture decisions
 │   ├── memory.md           # Memory vault management
-│   ├── recall.md           # Quick context loading
 │   ├── context.skill.md    # Pre-implementation context
 │   ├── reflect.skill.md    # Post-implementation reflection
 │   └── refine.skill.md     # Pattern refinement
@@ -79,7 +78,6 @@ claude-dev-workflow/
 | comms | `/comms` | Manage inter-team messages, issues, status |
 | adr | `/adr` | Manage architecture decisions and gaps |
 | memory | `/memory` | Add entities, patterns, sessions to vault |
-| recall | `/recall` | Quick context loading from memory |
 | context | `/context` | Load relevant ADRs/patterns before implementing |
 | reflect | `/reflect` | Capture learnings after implementation |
 | refine | `/refine` | Review and promote patterns |

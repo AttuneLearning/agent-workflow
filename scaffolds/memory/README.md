@@ -23,7 +23,7 @@ memory/
 ## Skills
 
 - `/memory` - Add entities, patterns, sessions
-- `/recall` - Quick context loading
+- `/context` - Load relevant context before implementing
 
 ## Usage
 

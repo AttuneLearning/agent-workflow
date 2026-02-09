@@ -6,8 +6,7 @@
   "created": "2026-02-07",
   "basedOn": [
     "team-config-learning-unit-ui.json (agent-qa-architect)",
-    "team-config.json (qa-validator)",
-    "/develop skill (Phase 3-5)"
+    "team-config.json (qa-validator)"
   ],
 
   "agent": {
@@ -222,18 +221,18 @@
     "runOrder": ["typeCheck", "unitTests", "coverage", "lint"]
   },
 
-  "integrationWithDevelop": {
-    "description": "How this config integrates with /develop skill",
-    "phases": {
-      "phase3": {
+  "completionWorkflow": {
+    "description": "How this config integrates with the completion gate",
+    "steps": {
+      "verification": {
         "name": "Verification",
         "codeReviewerRole": "Run automated checks, validate tests exist"
       },
-      "phase4": {
+      "documentation": {
         "name": "Documentation",
         "codeReviewerRole": "Create memory files, suggest ADRs, update patterns"
       },
-      "phase5": {
+      "completion": {
         "name": "Completion",
         "codeReviewerRole": "Final gate approval, verify all criteria met"
       }
@@ -251,7 +250,7 @@
     "This role runs AFTER implementation, not during",
     "Use extended thinking for subjective quality decisions",
     "Memory creation is mandatory, not optional",
-    "Can be run as separate agent or integrated into /develop Phase 4-5",
+    "Can be run as separate agent or integrated into the completion workflow",
     "Opus 4.6 preferred for pattern recognition and architectural judgment"
   ]
 }

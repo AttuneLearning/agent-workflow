@@ -27,7 +27,7 @@ mkdir -p .claude/commands
 
 # Create skill symlinks
 echo "Creating skill symlinks..."
-SKILLS=(comms adr memory recall)
+SKILLS=(comms adr memory)
 WORKFLOW_SKILLS=(context.skill reflect.skill refine.skill)
 
 for skill in "${SKILLS[@]}"; do
@@ -160,4 +160,4 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "5. Set up agent team hooks (see SETUP.md Step 7)"
 fi
 echo ""
-echo "Available skills: /comms /adr /memory /recall /context /reflect /refine"
+echo "Available skills: /comms /adr /memory /context /reflect /refine"
