@@ -57,31 +57,169 @@ if [ ! -f ".claude/settings.json" ]; then
 {
   "permissions": {
     "additionalDirectories": [
-      "../claude-dev-workflow"
+      "../.claude-workflow"
     ]
   }
 }
 EOF
     echo "  Created settings.json"
 else
-    echo "  settings.json exists - please verify additionalDirectories includes '../claude-dev-workflow'"
+    echo "  settings.json exists - please verify additionalDirectories includes '../.claude-workflow'"
 fi
 
-# Ask about dev_communication
+# =========================================================================
+# Dev Communication Setup
+# =========================================================================
 echo ""
 echo "Dev Communication Setup"
 echo "-----------------------"
-if [ -d "dev_communication" ]; then
-    echo "dev_communication/ already exists - skipping"
-elif [ -L "dev_communication" ]; then
-    echo "dev_communication/ is a symlink - skipping"
-else
-    read -p "Create dev_communication directory? [y/N] " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        cp -r "$SCRIPT_DIR/scaffolds/dev_communication" ./dev_communication
-        echo "Created dev_communication/ from scaffold"
+
+if [ -d "dev_communication" ] && [ ! -L "dev_communication" ]; then
+    # This is a real directory — likely the API project (owner)
+    echo "dev_communication/ exists as a directory — this project owns it."
+    echo "Checking structure..."
+
+    # Ensure the team-grouped structure exists
+    NEEDS_MIGRATION=false
+    if [ -d "dev_communication/messaging" ] && [ ! -d "dev_communication/backend" ]; then
+        NEEDS_MIGRATION=true
+        echo "  Old flat structure detected. Migration needed."
+        echo "  Run the migration manually or see PROCESS_GUIDE.md."
     fi
+
+    if [ ! -d "dev_communication/backend" ]; then
+        read -p "  Create team-grouped directory structure? [y/N] " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            # Read teams from registry or use defaults
+            TEAMS=("backend" "frontend")
+            for team in "${TEAMS[@]}"; do
+                mkdir -p "dev_communication/${team}/inbox"
+                mkdir -p "dev_communication/${team}/issues/queue"
+                mkdir -p "dev_communication/${team}/issues/active"
+                mkdir -p "dev_communication/${team}/issues/completed"
+                touch "dev_communication/${team}/inbox/.gitkeep"
+                touch "dev_communication/${team}/issues/queue/.gitkeep"
+                touch "dev_communication/${team}/issues/active/.gitkeep"
+                touch "dev_communication/${team}/issues/completed/.gitkeep"
+                # Copy team template files
+                if [ -d "$SCRIPT_DIR/scaffolds/dev_communication/${team}" ]; then
+                    cp -n "$SCRIPT_DIR/scaffolds/dev_communication/${team}/definition.yaml" "dev_communication/${team}/" 2>/dev/null || true
+                    cp -n "$SCRIPT_DIR/scaffolds/dev_communication/${team}/status.md" "dev_communication/${team}/" 2>/dev/null || true
+                fi
+                echo "  Created ${team}/ workspace"
+            done
+            mkdir -p "dev_communication/shared/architecture/decisions"
+            mkdir -p "dev_communication/shared/architecture/suggestions"
+            mkdir -p "dev_communication/shared/architecture/gaps"
+            mkdir -p "dev_communication/shared/architecture/templates"
+            mkdir -p "dev_communication/shared/guidance"
+            mkdir -p "dev_communication/shared/specs"
+            mkdir -p "dev_communication/shared/plans"
+            mkdir -p "dev_communication/shared/contracts"
+            mkdir -p "dev_communication/templates"
+            mkdir -p "dev_communication/archive"
+
+            # Copy templates and shared files from scaffold
+            if [ -d "$SCRIPT_DIR/scaffolds/dev_communication/templates" ]; then
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/templates/"* "dev_communication/templates/" 2>/dev/null || true
+                echo "  Copied templates from scaffold"
+            fi
+            if [ -d "$SCRIPT_DIR/scaffolds/dev_communication/shared" ]; then
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/shared/registry.yaml" "dev_communication/shared/" 2>/dev/null || true
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/shared/dependencies.md" "dev_communication/shared/" 2>/dev/null || true
+            fi
+            cp -n "$SCRIPT_DIR/scaffolds/dev_communication/index.md" "dev_communication/" 2>/dev/null || true
+            cp -n "$SCRIPT_DIR/scaffolds/dev_communication/PROCESS_GUIDE.md" "dev_communication/" 2>/dev/null || true
+
+            echo "  Team-grouped structure created."
+        fi
+    else
+        echo "  Team-grouped structure already exists."
+    fi
+
+elif [ -L "dev_communication" ]; then
+    # This is a symlink — non-API project
+    echo "dev_communication/ is a symlink — this project uses shared comms."
+    TARGET=$(readlink -f dev_communication)
+    echo "  Points to: $TARGET"
+
+else
+    # No dev_communication at all — ask what to do
+    echo "No dev_communication/ directory found."
+    echo ""
+    echo "Options:"
+    echo "  1) Create dev_communication/ here (this is the API/owner project)"
+    echo "  2) Create a symlink to another project's dev_communication/"
+    echo "  3) Skip"
+    echo ""
+    read -p "Choose [1/2/3]: " -n 1 -r
+    echo
+
+    case $REPLY in
+        1)
+            echo "Creating dev_communication/ directory..."
+            mkdir -p dev_communication
+
+            # Create team workspaces
+            TEAMS=("backend" "frontend")
+            for team in "${TEAMS[@]}"; do
+                mkdir -p "dev_communication/${team}/inbox"
+                mkdir -p "dev_communication/${team}/issues/queue"
+                mkdir -p "dev_communication/${team}/issues/active"
+                mkdir -p "dev_communication/${team}/issues/completed"
+                touch "dev_communication/${team}/inbox/.gitkeep"
+                touch "dev_communication/${team}/issues/queue/.gitkeep"
+                touch "dev_communication/${team}/issues/active/.gitkeep"
+                touch "dev_communication/${team}/issues/completed/.gitkeep"
+                # Copy team template files
+                if [ -d "$SCRIPT_DIR/scaffolds/dev_communication/${team}" ]; then
+                    cp -n "$SCRIPT_DIR/scaffolds/dev_communication/${team}/definition.yaml" "dev_communication/${team}/" 2>/dev/null || true
+                    cp -n "$SCRIPT_DIR/scaffolds/dev_communication/${team}/status.md" "dev_communication/${team}/" 2>/dev/null || true
+                fi
+                echo "  Created ${team}/ workspace"
+            done
+
+            # Create shared resources
+            mkdir -p "dev_communication/shared/architecture/decisions"
+            mkdir -p "dev_communication/shared/architecture/suggestions"
+            mkdir -p "dev_communication/shared/architecture/gaps"
+            mkdir -p "dev_communication/shared/architecture/templates"
+            mkdir -p "dev_communication/shared/guidance"
+            mkdir -p "dev_communication/shared/specs"
+            mkdir -p "dev_communication/shared/plans"
+            mkdir -p "dev_communication/shared/contracts"
+            mkdir -p "dev_communication/templates"
+            mkdir -p "dev_communication/archive"
+
+            # Copy scaffolds
+            if [ -d "$SCRIPT_DIR/scaffolds/dev_communication" ]; then
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/templates/"* "dev_communication/templates/" 2>/dev/null || true
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/README.md" "dev_communication/README.md" 2>/dev/null || true
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/shared/registry.yaml" "dev_communication/shared/" 2>/dev/null || true
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/shared/dependencies.md" "dev_communication/shared/" 2>/dev/null || true
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/index.md" "dev_communication/" 2>/dev/null || true
+                cp -n "$SCRIPT_DIR/scaffolds/dev_communication/PROCESS_GUIDE.md" "dev_communication/" 2>/dev/null || true
+                echo "  Copied scaffolds"
+            fi
+
+            echo "  dev_communication/ created with team-grouped structure."
+            ;;
+        2)
+            read -p "Path to API project root (e.g., ../cadencelms_api): " API_PATH
+            if [ -d "${API_PATH}/dev_communication" ]; then
+                ln -s "${API_PATH}/dev_communication" ./dev_communication
+                echo "  Symlinked dev_communication/ → ${API_PATH}/dev_communication"
+            else
+                echo "  Error: ${API_PATH}/dev_communication not found."
+                echo "  Run setup in the API project first to create it."
+                exit 1
+            fi
+            ;;
+        3)
+            echo "  Skipped dev_communication setup."
+            ;;
+    esac
 fi
 
 # Ask about memory
@@ -154,8 +292,8 @@ echo ""
 echo "Next steps:"
 echo "1. Review .claude/settings.json"
 echo "2. Add workflow section to CLAUDE.md (see SETUP.md)"
-echo "3. Initialize team status in dev_communication/coordination/"
-echo "4. Create initial context in memory/context/"
+echo "3. Initialize team status in {team}/status.md"
+echo "4. Initialize shared/registry.yaml with your active teams"
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "5. Set up agent team hooks (see SETUP.md Step 7)"
 fi

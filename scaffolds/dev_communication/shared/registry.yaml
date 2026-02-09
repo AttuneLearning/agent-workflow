@@ -1,0 +1,29 @@
+# =============================================================================
+# Project Team Registry — TEMPLATE
+# =============================================================================
+#
+# Edit this file to list your project's active teams.
+# Generic role catalog: .claude-workflow/teams/catalog.yaml
+#
+# =============================================================================
+
+project: YourProjectName
+
+active_teams:
+  - id: backend
+    name: Backend
+    alias: api
+    role: backend
+    repo: your_api_repo
+    definition: backend/definition.yaml
+
+  - id: frontend
+    name: Frontend
+    alias: ui
+    role: frontend
+    repo: your_ui_repo
+    definition: frontend/definition.yaml
+
+aliases:
+  api: backend
+  ui: frontend

@@ -1,0 +1,31 @@
+# =============================================================================
+# Team Definition — Backend
+# =============================================================================
+#
+# Describes this team's identity, responsibilities, and tech stack.
+# Each team workspace has one of these.
+#
+# =============================================================================
+
+team:
+  id: backend
+  name: Backend
+  alias: api
+  role: backend                       # Must match a role in teams/catalog.yaml
+
+responsibilities:
+  - API development and endpoint design
+  - Database schema and migrations
+  - Authentication and authorization
+  - Business logic and validation
+  - Background jobs and integrations
+
+stack:
+  language: ""                        # e.g., TypeScript, Python, Go
+  framework: ""                       # e.g., Express, FastAPI, Gin
+  database: ""                        # e.g., MongoDB, PostgreSQL
+  test_framework: ""                  # e.g., Jest, pytest, go test
+
+conventions:
+  issue_prefix: API-ISS
+  branch_prefix: api/

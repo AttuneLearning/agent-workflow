@@ -1,0 +1,31 @@
+# =============================================================================
+# Team Definition — Frontend
+# =============================================================================
+#
+# Describes this team's identity, responsibilities, and tech stack.
+# Each team workspace has one of these.
+#
+# =============================================================================
+
+team:
+  id: frontend
+  name: Frontend
+  alias: ui
+  role: frontend                      # Must match a role in teams/catalog.yaml
+
+responsibilities:
+  - UI component development
+  - Page routing and navigation
+  - State management and API integration
+  - Accessibility and responsive design
+  - Client-side performance
+
+stack:
+  language: ""                        # e.g., TypeScript
+  framework: ""                       # e.g., React, Vue, Svelte
+  styling: ""                         # e.g., Tailwind, CSS Modules
+  test_framework: ""                  # e.g., Vitest, Jest
+
+conventions:
+  issue_prefix: UI-ISS
+  branch_prefix: ui/

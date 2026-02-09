@@ -8,6 +8,7 @@ A comprehensive development workflow system for Claude Code projects.
 - **Patterns** - Code patterns with token-optimized format
 - **Indexes** - Fast lookup for ADRs, patterns, and work types
 - **Hooks** - Advisory reminders (pre/post implementation, testing)
+- **Teams** - Generic role catalog and cross-team communication protocol
 - **Scaffolds** - Ready-to-use directory structures for new projects
 
 ## Quick Start
@@ -51,6 +52,10 @@ claude-dev-workflow/
 │   ├── post-implementation.md
 │   └── test-reminder.md
 │
+├── teams/                  # Generic team definitions
+│   ├── catalog.yaml        # Role catalog (frontend, backend, mobile, etc.)
+│   └── protocol.yaml       # Cross-team communication rules
+│
 ├── team-configs/           # Agent team configurations (shared)
 │   ├── code-reviewer-config.json     # QA/Architect code gate
 │   ├── agent-team-roles.json         # Agent team role definitions
@@ -63,7 +68,7 @@ claude-dev-workflow/
 │   └── session-template.md
 │
 ├── scaffolds/              # Directory scaffolds
-│   ├── dev_communication/  # Inter-team communication hub
+│   ├── dev_communication/  # Team-grouped communication hub
 │   └── memory/             # Extended memory vault (includes team-configs/)
 │
 ├── SETUP.md                # Setup instructions
@@ -97,11 +102,11 @@ claude-dev-workflow/
 
 ### dev_communication/
 
-Inter-team communication hub with:
-- Messaging (inbox/outbox per team)
-- Issue tracking (queue/active/completed)
-- Architecture decisions
-- Team coordination
+Team-grouped communication hub with:
+- Per-team workspaces (`backend/`, `frontend/`) with inbox and issue tracking
+- Shared resources (`shared/`) for architecture decisions, guidance, specs, contracts
+- Cross-team protocol: messages cross boundaries, issues stay local
+- Templates for messages and issues
 
 ### memory/
 

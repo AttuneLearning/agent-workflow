@@ -1,47 +1,54 @@
 # Dev Communication Hub
 
-Inter-team communication and coordination hub.
+Centralized communication system for coordinating development across teams.
 
 ## Structure
 
 ```
 dev_communication/
-├── messaging/           # Cross-team messages
-│   ├── api-to-ui/       # API team outbox
-│   ├── ui-to-api/       # UI team outbox (API inbox)
-│   ├── archive/         # Completed threads
-│   └── templates/       # Message templates
-├── issues/              # Issue tracking
-│   ├── api/             # API team issues
-│   │   ├── queue/       # Not started
-│   │   ├── active/      # In progress
-│   │   └── completed/   # Done
-│   ├── ui/              # UI team issues
-│   │   ├── queue/
-│   │   ├── active/
-│   │   └── completed/
-│   └── templates/
-├── architecture/        # ADRs and decisions
-│   ├── decisions/       # ADR files
-│   ├── suggestions/     # Pending suggestions
-│   ├── gaps/            # Known gaps
-│   └── templates/
-├── coordination/        # Team status and dependencies
-├── guidance/            # Development guidelines
-├── specs/               # Feature specifications
-└── plans/               # Planning documents
+├── backend/                 # Backend team workspace
+│   ├── definition.yaml      # Team identity and config
+│   ├── status.md            # Current focus and blockers
+│   ├── inbox/               # Messages TO this team
+│   └── issues/              # Issue tracking
+│       ├── queue/
+│       ├── active/
+│       └── completed/
+│
+├── frontend/                # Frontend team workspace
+│   ├── definition.yaml
+│   ├── status.md
+│   ├── inbox/
+│   └── issues/{queue,active,completed}/
+│
+├── shared/                  # Cross-team resources
+│   ├── registry.yaml        # Active teams in this project
+│   ├── dependencies.md      # Cross-team blockers
+│   ├── architecture/        # ADRs, suggestions, gaps
+│   ├── guidance/            # Development guidelines
+│   ├── specs/               # Feature specifications
+│   ├── plans/               # Planning documents
+│   └── contracts/           # API endpoint contracts
+│
+├── templates/               # Message and issue templates
+├── archive/                 # Completed message threads
+├── index.md                 # Issue tracking dashboard
+└── PROCESS_GUIDE.md         # Detailed workflow documentation
 ```
+
+## Communication Protocol
+
+- **Messages** cross team boundaries — save to `{recipient_team}/inbox/`
+- **Issues** stay local — only create issues in your own team's queue
+- See `.claude-workflow/teams/protocol.yaml` for the full protocol
 
 ## Skills
 
 - `/comms` - Check inbox, send messages, manage issues
 - `/adr` - Manage architecture decisions
 
-## Setup
-
-This directory should be shared between API and UI projects via symlink:
+## Symlink Setup (Non-API Projects)
 
 ```bash
-# In UI project
 ln -s ../cadencelms_api/dev_communication dev_communication
 ```

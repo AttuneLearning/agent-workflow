@@ -73,7 +73,7 @@ Update `.claude/settings.json`:
 {
   "permissions": {
     "additionalDirectories": [
-      "../claude-dev-workflow"
+      "../.claude-workflow"
     ]
   }
 }
@@ -105,10 +105,16 @@ Add to your project's `CLAUDE.md`:
 
 #### Set Up Team Status
 
-Edit `dev_communication/coordination/{team}-team-status.md`:
-- Set your team name
+Edit `dev_communication/{team}/status.md` for each active team:
+- Set the current date
 - Add current focus
-- List any active issues
+- List any blockers
+
+#### Initialize Team Registry
+
+Edit `dev_communication/shared/registry.yaml`:
+- Set your project name
+- List active teams with their repos and aliases
 
 #### Create Initial Context
 
@@ -167,7 +173,7 @@ your-project/
 │   ├── hooks/              # Quality gate hooks (agent teams)
 │   │   ├── task-completed.sh
 │   │   └── teammate-idle.sh
-│   ├── team-configs/        # Local overrides (non-frontend projects only)
+│   ├── team-configs/       # Local overrides (non-frontend projects only)
 │   ├── archive/            # Legacy configs (if upgrading)
 │   └── settings.json
 ├── .claude-workflow/       # Git submodule
@@ -175,14 +181,32 @@ your-project/
 │   ├── patterns/
 │   ├── indexes/
 │   ├── hooks/
+│   ├── teams/              # Generic role catalog + communication protocol
 │   ├── team-configs/       # Shared agent team configs (override in .claude/team-configs/)
 │   ├── templates/
 │   └── scaffolds/
 ├── dev_communication/      # Copied from scaffold (or symlinked)
-│   ├── messaging/
-│   ├── issues/
-│   ├── architecture/
-│   └── coordination/
+│   ├── backend/            # Backend team workspace
+│   │   ├── definition.yaml
+│   │   ├── status.md
+│   │   ├── inbox/
+│   │   └── issues/{queue,active,completed}/
+│   ├── frontend/           # Frontend team workspace
+│   │   ├── definition.yaml
+│   │   ├── status.md
+│   │   ├── inbox/
+│   │   └── issues/{queue,active,completed}/
+│   ├── shared/             # Cross-team resources
+│   │   ├── registry.yaml
+│   │   ├── dependencies.md
+│   │   ├── architecture/
+│   │   ├── guidance/
+│   │   ├── specs/
+│   │   ├── plans/
+│   │   └── contracts/
+│   ├── templates/
+│   ├── archive/
+│   └── index.md
 ├── memory/                 # Copied from scaffold
 │   ├── context/
 │   ├── entities/
