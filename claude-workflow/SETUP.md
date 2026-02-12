@@ -8,8 +8,11 @@ Complete guide to setting up the Claude Code development workflow in a new proje
 # 1. Add submodule to your project
 git submodule add https://github.com/yourusername/claude-dev-workflow.git .claude-workflow
 
-# 2. Run setup script (or follow manual steps below)
-./.claude-workflow/setup.sh
+# 2. Run unified agent coordination setup (Claude + Codex)
+./agent-coord-setup.sh --team backend
+
+# Claude-only setup (if needed)
+./agent-coord-setup.sh --claude-only
 ```
 
 ## Manual Setup

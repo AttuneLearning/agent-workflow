@@ -40,7 +40,7 @@
           "CLAUDE.md",
           "memory/patterns/",
           "memory/entities/",
-          "dev_communication/architecture/decisions/"
+          "dev_communication/shared/architecture/decisions/"
         ],
         "spawnPrompt": "You are an implementer teammate. Your task: {task_description}. Follow FSD architecture (entities > features > widgets > pages). Use existing patterns from memory/patterns/. Use shadcn/ui + Tailwind for UI components. Define types in the entity layer. Do NOT write tests - the tester teammate handles that. Ensure TypeScript compiles cleanly."
       },

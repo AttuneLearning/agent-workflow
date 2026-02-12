@@ -11,6 +11,9 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 echo "Claude Dev Workflow Setup"
 echo "========================="
 echo ""
+echo "DEPRECATION NOTICE: Prefer ./agent-coord-setup.sh for unified Claude + Codex setup."
+echo "This script still works and now acts as a legacy entrypoint."
+echo ""
 
 # Check if running from correct location
 if [ ! -d "$SCRIPT_DIR/skills" ]; then
@@ -226,14 +229,29 @@ fi
 echo ""
 echo "Memory Vault Setup"
 echo "------------------"
-if [ -d "memory" ]; then
-    echo "memory/ already exists - skipping"
-else
-    read -p "Create memory vault directory? [y/N] " -n 1 -r
+MEMORY_ROOT="ai_team_config/memory_store"
+LEGACY_MEMORY_ROOT="memory"
+
+if [ -d "$MEMORY_ROOT" ]; then
+    echo "$MEMORY_ROOT already exists - skipping"
+elif [ -d "$LEGACY_MEMORY_ROOT" ]; then
+    echo "Legacy memory/ detected."
+    read -p "Move memory/ to $MEMORY_ROOT? [y/N] " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        cp -r "$SCRIPT_DIR/scaffolds/memory" ./memory
-        echo "Created memory/ from scaffold"
+        mkdir -p "ai_team_config"
+        mv "$LEGACY_MEMORY_ROOT" "$MEMORY_ROOT"
+        echo "Moved memory/ -> $MEMORY_ROOT"
+    else
+        echo "Skipped migration of legacy memory/."
+    fi
+else
+    read -p "Create memory vault directory at $MEMORY_ROOT? [y/N] " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        mkdir -p "ai_team_config"
+        cp -r "$SCRIPT_DIR/scaffolds/memory" "./$MEMORY_ROOT"
+        echo "Created $MEMORY_ROOT from scaffold"
     fi
 fi
 
@@ -248,14 +266,14 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     mkdir -p .claude/hooks
     echo "  Created .claude/hooks/"
 
-    # Create memory/team-configs if not exists
-    if [ -d "memory" ] && [ ! -d "memory/team-configs" ]; then
+    # Create memory_store/team-configs if not exists
+    if [ -d "$MEMORY_ROOT" ] && [ ! -d "$MEMORY_ROOT/team-configs" ]; then
         if [ -d "$SCRIPT_DIR/scaffolds/memory/team-configs" ]; then
-            cp -r "$SCRIPT_DIR/scaffolds/memory/team-configs" memory/team-configs
-            echo "  Created memory/team-configs/ from scaffold"
+            cp -r "$SCRIPT_DIR/scaffolds/memory/team-configs" "$MEMORY_ROOT/team-configs"
+            echo "  Created $MEMORY_ROOT/team-configs/ from scaffold"
         else
-            mkdir -p memory/team-configs
-            echo "  Created memory/team-configs/"
+            mkdir -p "$MEMORY_ROOT/team-configs"
+            echo "  Created $MEMORY_ROOT/team-configs/"
         fi
     fi
 

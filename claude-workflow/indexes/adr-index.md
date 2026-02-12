@@ -33,4 +33,4 @@ VERS-001|Versioning|CourseVersioning:immutable|CanonicalCourse,CourseVersion,pub
 - Use `authorize()` middleware
 
 ## ADR Locations
-Path: `dev_communication/architecture/decisions/ADR-{ID}.md`
+Path: `dev_communication/shared/architecture/decisions/ADR-{ID}.md`

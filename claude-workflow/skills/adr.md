@@ -21,10 +21,10 @@ Show current architecture status.
 **Trigger:** `/adr`, `/adr status`
 
 **Steps:**
-1. Read `dev_communication/architecture/index.md`
-2. Count files in `dev_communication/architecture/suggestions/`
-3. Read `dev_communication/architecture/gaps/index.md` for gap count
-4. Read `dev_communication/architecture/decision-log.md` for ADR count
+1. Read `dev_communication/shared/architecture/index.md`
+2. Count files in `dev_communication/shared/architecture/suggestions/`
+3. Read `dev_communication/shared/architecture/gaps/index.md` for gap count
+4. Read `dev_communication/shared/architecture/decision-log.md` for ADR count
 
 **Output:**
 ```
@@ -50,12 +50,12 @@ Use `/adr check` for full analysis.
 **Trigger:** `/adr check`, `/adr check [domain]`
 
 **Steps:**
-1. Read architecture index: `dev_communication/architecture/index.md`
-2. Read decision log: `dev_communication/architecture/decision-log.md`
-3. Scan all ADRs in: `dev_communication/architecture/decisions/*.md`
+1. Read architecture index: `dev_communication/shared/architecture/index.md`
+2. Read decision log: `dev_communication/shared/architecture/decision-log.md`
+3. Scan all ADRs in: `dev_communication/shared/architecture/decisions/*.md`
 4. For each ADR extract: ID, Title, Status, Domain
 5. Compare against expected architecture areas
-6. Read `dev_communication/architecture/gaps/index.md`
+6. Read `dev_communication/shared/architecture/gaps/index.md`
 7. Generate comprehensive report
 
 ---
@@ -65,7 +65,7 @@ Use `/adr check` for full analysis.
 **Trigger:** `/adr gaps`
 
 **Steps:**
-1. Read `dev_communication/architecture/gaps/index.md`
+1. Read `dev_communication/shared/architecture/gaps/index.md`
 2. For each gap, summarize: Domain, Priority, Suggested ADR
 3. Recommend top 3 to address
 
@@ -78,7 +78,7 @@ Use `/adr check` for full analysis.
 **Steps:**
 1. If no topic, ask for: Topic, Context, Teams affected, Priority
 2. Generate filename: `YYYY-MM-DD_{team}_{topic_slug}.md`
-3. Create in `dev_communication/architecture/suggestions/`
+3. Create in `dev_communication/shared/architecture/suggestions/`
 4. Confirm created
 
 ---
@@ -102,10 +102,10 @@ Use `/adr check` for full analysis.
 **Steps:**
 1. If suggestion file provided, use content to populate ADR
 2. Otherwise ask for: Domain, Title, Context, Decision, Consequences
-3. Read template from `dev_communication/architecture/templates/adr-template.md`
-4. Save to: `dev_communication/architecture/decisions/ADR-{DOMAIN}-{NNN}-{TITLE}.md`
-5. Update: `dev_communication/architecture/decision-log.md`
-6. Update: `dev_communication/architecture/index.md`
+3. Read template from `dev_communication/shared/architecture/templates/adr-template.md`
+4. Save to: `dev_communication/shared/architecture/decisions/ADR-{DOMAIN}-{NNN}-{TITLE}.md`
+5. Update: `dev_communication/shared/architecture/decision-log.md`
+6. Update: `dev_communication/shared/architecture/index.md`
 7. If from suggestion, archive the suggestion
 8. If gap addressed, update gaps index
 9. Confirm created
@@ -117,7 +117,7 @@ Use `/adr check` for full analysis.
 **Trigger:** `/adr review [ADR-ID]`
 
 **Steps:**
-1. Read the ADR from `dev_communication/architecture/decisions/`
+1. Read the ADR from `dev_communication/shared/architecture/decisions/`
 2. Check for staleness, missing links, implementation drift
 3. Suggest updates if needed
 4. If user approves, update the ADR
@@ -128,7 +128,7 @@ Use `/adr check` for full analysis.
 ## File Locations
 
 ```
-dev_communication/architecture/
+dev_communication/shared/architecture/
 ├── index.md              # Main hub
 ├── decision-log.md       # Chronological ADR list
 ├── decisions/            # ADR files

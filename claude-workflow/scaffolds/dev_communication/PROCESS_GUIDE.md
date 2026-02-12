@@ -153,22 +153,63 @@ Use `/adr suggest [topic]` or manually create in `shared/architecture/suggestion
 
 ---
 
-## Session Protocol
+## Issue Lifecycle — 5 Phase Workflow
 
-**On Session Start:**
-1. `/comms` — Check inbox and pending issues
-2. `/adr` — Check architecture status
+Every issue follows five mandatory phases. No phase may be skipped.
 
-**During Work:**
-- Move issues through lifecycle
-- Send messages for cross-team requests
-- Define contracts before implementation
+### Phase 1: Intake
 
-**On Session End:**
-1. Update team status file (`{team}/status.md`)
-2. New pattern? → `/adr suggest`
-3. Affects other team? → `/comms send`
-4. Ensure all messages are processed
+Triage inbound work into actionable issues with contracts and context.
+
+1. **Check comms** — `/comms` to read inbox messages and identify pending requests
+2. **Create issues** — Convert accepted inbound messages into local issues (`{team}/issues/queue/`)
+3. **Read checklist** — `dev_communication/guidance/FEATURE_DEVELOPMENT_CHECKLIST.md`
+4. **Define contracts** — If the work involves new or changed API endpoints, define contracts first and send to the other team (`/comms send`). Get agreement before implementation.
+5. **Check ADRs** — `/adr` or read `dev_communication/shared/architecture/decisions/` for relevant decisions
+
+Move issue from `queue/` to `active/` when starting work.
+
+### Phase 2: Implementation
+
+Build the feature or fix, with tests, in a verified state.
+
+1. **Implement** — Write the code for the feature or fix
+2. **Write tests** — Create unit and/or integration tests for the implementation
+3. **Run tests** — `npx jest [path]` to verify tests pass
+4. **Verify TypeScript** — `npx tsc --noEmit` must report 0 errors
+
+### Phase 3: QA Gate
+
+Validate the implementation against completion criteria before marking done.
+
+1. **Run completion gate checks:**
+   - [ ] `npx tsc --noEmit` — 0 errors
+   - [ ] `npm run test:unit` — all tests pass
+   - [ ] New functionality has corresponding tests
+2. **Review against code-reviewer-config** — Check `.claude/team-configs/code-reviewer-config.json` criteria
+
+If any check fails, return to Phase 2.
+
+### Phase 4: Completion
+
+Record the work and close the issue.
+
+1. **Create session file** — `memory/sessions/{date}-{issue-slug}.md`
+2. **Update issue file** — Add commit hash and set status to COMPLETE
+3. **Move issue** — `active/` to `completed/`
+
+### Phase 5: Comms Response
+
+Send a response to the originating team. **This phase is NOT optional.**
+
+If the work was triggered by an inbound message from another team:
+
+1. **Send response** — `/comms send` to the originating team's inbox
+2. **Include in the response:**
+   - What was fixed or built
+   - What changed (endpoints, contracts, behavior)
+   - Any action required on their side (e.g., update imports, use new field)
+3. **Archive** — Move the original inbound message to `archive/` if not already done
 
 ---
 

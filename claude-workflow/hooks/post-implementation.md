@@ -15,11 +15,13 @@ Advisory reminder after implementation phase completes.
 
 ```
 +--------------------------------------------------+
-|  Capture learnings from this implementation?     |
+|  Post-implementation checklist:                  |
 |                                                  |
-|  Run `/reflect` to detect patterns and gaps      |
+|  1. Comms response sent? (if triggered by        |
+|     inbound message, send /comms send)           |
+|  2. Capture learnings? (run /reflect)            |
 |                                                  |
-|  [Reflect]  [Skip]          (auto-dismiss: 15s)  |
+|  [Comms + Reflect]  [Reflect]  [Skip]  (15s)     |
 +--------------------------------------------------+
 ```
 
@@ -36,18 +38,31 @@ Advisory reminder after implementation phase completes.
 IF (
   (message indicates completion OR commit detected OR tests pass)
   AND files were modified in session
-  AND no /reflect in current cycle
+  AND (no /reflect in current cycle OR no comms response sent for inbound-triggered work)
 )
 THEN show advisory
+```
+
+### Comms Response Detection
+
+```
+IF (
+  current issue was created from an inbound message
+  AND no outbound message was sent to the originating team in this cycle
+)
+THEN comms_response_needed = true
 ```
 
 ## Actions
 
 | Button | Action |
 |--------|--------|
-| Reflect | Execute `/reflect` on current session |
+| Comms + Reflect | Prompt `/comms send` to originating team, then execute `/reflect` |
+| Reflect | Execute `/reflect` on current session (use when no comms response needed) |
 | Skip | Dismiss, mark cycle as reflected |
 | (timeout) | Same as Skip |
+
+**Note:** If `comms_response_needed` is true, the "Comms + Reflect" button is highlighted as the recommended action. Skipping comms response when one is needed should produce a warning.
 
 ## Implementation Cycle
 

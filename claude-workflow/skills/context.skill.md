@@ -23,9 +23,9 @@ Pre-implementation context loading. Combines ADR lookup, pattern loading, and me
 
 Fast orientation for session start or context recovery:
 
-1. Read `memory/memory-log.md` for recent activity
-2. Read `memory/context/project-overview.md`
-3. If topic mentioned, search `memory/` for keywords
+1. Read `ai_team_config/memory_store/memory-log.md` for recent activity
+2. Read `ai_team_config/memory_store/context/project-overview.md`
+3. If topic mentioned, search `ai_team_config/memory_store/` for keywords
 4. Output brief summary:
    ```
    ## Context Loaded
@@ -46,9 +46,9 @@ Fast orientation for session start or context recovery:
 
 2. **Load ADRs** (max 3) — decision section only, skip rationale unless requested
 
-3. **Load Patterns** (max 4) from `memory/patterns/` matching work type
+3. **Load Patterns** (max 4) from `ai_team_config/memory_store/patterns/` matching work type
 
-4. **Load Memory** — search `memory/entities/` and `memory/context/` for topic keywords
+4. **Load Memory** — search `ai_team_config/memory_store/entities/` and `ai_team_config/memory_store/context/` for topic keywords
 
 5. **Output:**
    ```
