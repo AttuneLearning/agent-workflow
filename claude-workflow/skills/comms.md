@@ -136,13 +136,19 @@ Move an issue through lifecycle.
 **Steps:**
 1. Find the issue file
 2. Ask target status: queue, active, completed
-3. Move file to appropriate folder
-4. Update status field in the issue
+3. Update status field in the issue
+4. Move file to appropriate folder
 5. If completing:
    - Ask for completion notes
    - Update completion section
+   - Set `Status: COMPLETE` in the issue file
+   - Move the issue file into `issues/completed/` in the same action
    - If cross-team, ask if response message needed
 6. Confirm moved
+
+**Completion rule (mandatory):**
+- Completed issues must not remain in `queue/` or `active/`.
+- Completion is only valid after both status update and move to `completed/`.
 
 ---
 

@@ -69,6 +69,10 @@ Guardrail:
 1. Locate issue file.
 2. Move between `queue/`, `active/`, `completed/`.
 3. Update issue status metadata in file body.
+4. If moving to `completed/`, this is mandatory:
+   - set `Status` to `COMPLETE` in the issue file before/with the move
+   - ensure the final path is `dev_communication/<team>/issues/completed/`
+5. Do not leave completed work in `queue/` or `active/`.
 
 ### 6. Archive
 
@@ -82,3 +86,4 @@ Guardrail:
 - Always return file paths created/updated/moved.
 - For `check`, provide short, scan-friendly status by team.
 - For `send` or `issue`, include exact filenames for traceability.
+- When issue completion is reported, explicitly confirm both status update and move to `completed/`.
