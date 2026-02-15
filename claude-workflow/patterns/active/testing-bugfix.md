@@ -44,7 +44,7 @@ describe('Module API - Bug Fix', () => {
   describe('regression: ownerDepartmentId validation', () => {
     it('should require ownerDepartmentId on create (was: allowing null)', async () => {
       const res = await request(app)
-        .post('/api/v2/modules')
+        .post('/modules')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           title: 'Test Module',

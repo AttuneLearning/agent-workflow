@@ -11,6 +11,7 @@ MODE="both" # claude | codex | both
 TEAM=""
 LIST_TEAMS=0
 USER_SET_WORKSPACE_ROOT=0
+AUTO_TEAM=1
 declare -a CODEX_ARGS=()
 
 usage() {
@@ -26,7 +27,9 @@ Modes:
   --codex-only           Run only .codex-workflow/install.sh
 
 Codex options:
-  --team <id>            Team id for Codex install (required for codex modes unless prompted)
+  --team <id>            Team id for Codex install (optional when auto-detection works)
+  --auto-team            Auto-detect team from repository definitions when --team is omitted
+  --no-auto-team         Disable auto-detection and prompt when --team is omitted
   --list-teams           List Codex teams and exit
   --target <path>        Forwarded to Codex installer
   --pack-name <name>     Forwarded to Codex installer
@@ -72,6 +75,14 @@ parse_args() {
         LIST_TEAMS=1
         shift
         ;;
+      --auto-team)
+        AUTO_TEAM=1
+        shift
+        ;;
+      --no-auto-team)
+        AUTO_TEAM=0
+        shift
+        ;;
       --target|--pack-name|--workspace-root)
         [[ $# -ge 2 ]] || { echo "Error: $1 requires a value" >&2; exit 2; }
         if [[ "$1" == "--workspace-root" ]]; then
@@ -108,6 +119,23 @@ prompt_team_if_needed() {
   if [[ -n "$TEAM" ]]; then
     return
   fi
+
+  if [[ "$AUTO_TEAM" -eq 1 ]]; then
+    local detected_team=""
+    if [[ "$USER_SET_WORKSPACE_ROOT" -eq 1 ]]; then
+      detected_team="$(bash "$CODEX_INSTALL" --detect-team "${CODEX_ARGS[@]}" 2>/dev/null || true)"
+    else
+      detected_team="$(bash "$CODEX_INSTALL" --workspace-root "$WORKSPACE_ROOT" --detect-team "${CODEX_ARGS[@]}" 2>/dev/null || true)"
+    fi
+    detected_team="$(echo "$detected_team" | tr -d '\r\n')"
+    if [[ -n "$detected_team" ]]; then
+      TEAM="$detected_team"
+      echo ""
+      echo "Auto-detected Codex team: $TEAM"
+      return
+    fi
+  fi
+
   echo ""
   echo "Codex team not specified."
   if [[ "$USER_SET_WORKSPACE_ROOT" -eq 1 ]]; then

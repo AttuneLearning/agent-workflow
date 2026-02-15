@@ -6,6 +6,20 @@
       "name": "Frontend",
       "alias": "ui",
       "issue_prefix": "UI-ISS",
+      "sub_teams": {
+        "frontend-dev": {
+          "name": "Frontend-Dev",
+          "function": "dev",
+          "issue_prefix": "UI-ISS",
+          "role_guidance": "dev_communication/shared/guidance/FRONTEND_DEV_ROLE_GUIDANCE.md"
+        },
+        "frontend-qa": {
+          "name": "Frontend-QA",
+          "function": "qa",
+          "issue_prefix": "UI-QA",
+          "role_guidance": "dev_communication/shared/guidance/FRONTEND_QA_ROLE_GUIDANCE.md"
+        }
+      },
       "enabled_skills": [
         "comms",
         "adr",
@@ -33,6 +47,21 @@
       "name": "Backend",
       "alias": "api",
       "issue_prefix": "API-ISS",
+      "comms_check_scope": "team-only",
+      "sub_teams": {
+        "backend-dev": {
+          "name": "Backend-Dev",
+          "function": "dev",
+          "issue_prefix": "API-ISS",
+          "role_guidance": "dev_communication/shared/guidance/BACKEND_DEV_ROLE_GUIDANCE.md"
+        },
+        "backend-qa": {
+          "name": "Backend-QA",
+          "function": "qa",
+          "issue_prefix": "BQA",
+          "role_guidance": "dev_communication/shared/guidance/BACKEND_QA_ROLE_GUIDANCE.md"
+        }
+      },
       "enabled_skills": [
         "comms",
         "adr",

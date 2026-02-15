@@ -215,7 +215,7 @@ else
             echo "  dev_communication/ created with team-grouped structure."
             ;;
         2)
-            read -p "Path to API project root (e.g., ../cadencelms_api): " API_PATH
+            read -p "Path to API project root (e.g., ../<api_project_root>): " API_PATH
             if [ -d "${API_PATH}/dev_communication" ]; then
                 ln -s "${API_PATH}/dev_communication" ./dev_communication
                 echo "  Symlinked dev_communication/ → ${API_PATH}/dev_communication"

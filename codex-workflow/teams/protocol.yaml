@@ -69,6 +69,37 @@ messaging:
   naming: "YYYY-MM-DD_{subject_slug}.md"
 
 # -----------------------------------------------------------------------------
+# Sub-Teams
+# -----------------------------------------------------------------------------
+
+sub_teams:
+  description: >
+    Teams may optionally define sub-teams (e.g., dev + qa split).
+    Sub-teams share the parent team's inbox and issue directories.
+    Distinction is via From/To headers in messages and issue Requested By/Assigned To fields.
+  rules:
+    - Sub-teams share parent's inbox directory
+    - Sub-teams share parent's issue queue/active/completed directories
+    - Each sub-team has its own issue prefix (e.g., API-ISS for dev, BQA for qa)
+    - Messages use sub-team names in From/To headers for routing
+    - Sub-team role guidance lives in dev_communication/shared/guidance/
+  naming:
+    pattern: "{parent_id}-{function}"
+    examples:
+      - backend-dev
+      - backend-qa
+      - frontend-dev
+      - frontend-qa
+  header_values:
+    description: "Use these in From/To/Requested By/Assigned To fields"
+    format: "{ParentName}-{Function}"
+    examples:
+      - Backend-Dev
+      - Backend-QA
+      - Frontend-Dev
+      - Frontend-QA
+
+# -----------------------------------------------------------------------------
 # Cross-Team Bug Reports
 # -----------------------------------------------------------------------------
 

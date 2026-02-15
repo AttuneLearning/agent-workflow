@@ -29,3 +29,14 @@ stack:
 conventions:
   issue_prefix: UI-ISS
   branch_prefix: ui/
+
+# Optional: Sub-team identities that share this team's inbox/issues
+sub_teams:
+  frontend-dev:
+    name: ""            # e.g., Frontend-Dev
+    function: dev       # dev | qa
+    issue_prefix: ""    # e.g., UI-ISS
+  frontend-qa:
+    name: ""            # e.g., Frontend-QA
+    function: qa        # dev | qa
+    issue_prefix: ""    # e.g., UI-QA

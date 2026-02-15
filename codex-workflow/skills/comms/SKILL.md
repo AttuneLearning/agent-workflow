@@ -17,24 +17,27 @@ Before running actions, resolve active team defaults from:
 Use `team_profile.default_paths` and `issue_prefix` from that file as defaults.
 If no active team config exists, ask the user which team context to use.
 
+Project policy:
+- Default comms checks are `team-only`.
+- In backend context, check only `dev_communication/backend/inbox` and backend issue folders unless the user explicitly asks for frontend/cross-team status.
+
 ## Inputs to resolve
 
 - Action: `check`, `send`, `issue`, `status`, `move`, or `archive`
 - Team context: current team (`backend` or `frontend`)
 - Target team (for cross-team message requests)
+- Header normalization (for new messages): use `Backend-Dev`, `Backend-QA`, `Frontend-Dev`, `Frontend-QA`
 
 ## Actions
 
 ### 1. Check (default)
 
 1. List:
-   - `dev_communication/backend/inbox/`
-   - `dev_communication/backend/issues/queue/`
-   - `dev_communication/backend/issues/active/`
-   - `dev_communication/frontend/inbox/`
-   - `dev_communication/frontend/issues/queue/`
-   - `dev_communication/frontend/issues/active/`
-2. Summarize pending messages and issue counts.
+   - Active team inbox (`team_profile.default_paths.inbox`)
+   - Active team issues queue (`team_profile.default_paths.issues_queue`)
+   - Active team issues active (`team_profile.default_paths.issues_active`)
+2. Summarize pending messages and issue counts for the active team.
+3. Only include cross-team inbox/issue status when explicitly requested by the user.
 
 ### 2. Send
 
@@ -52,26 +55,29 @@ If no active team config exists, ask the user which team context to use.
 3. Save to target queue:
    - `dev_communication/backend/issues/queue/` for API issues
    - `dev_communication/frontend/issues/queue/` for UI issues
-4. Filename format: `{TEAM}-ISS-{NNN}_{title_slug}.md`.
+4. Initialize issue metadata with `Status: QUEUE`.
+5. Filename format: `{TEAM}-ISS-{NNN}_{title_slug}.md`.
 
 Guardrail:
 - Follow team protocol: messages cross team boundaries; issue ownership is team-local unless user explicitly asks to create across teams.
 
 ### 4. Status
 
-1. Review active issues for both teams.
-2. Update the relevant status file:
-   - `dev_communication/backend/status.md`
-   - `dev_communication/frontend/status.md`
+1. Review active issues for the active team by default.
+2. Update active team status file:
+   - backend: `dev_communication/backend/status.md`
+   - frontend: `dev_communication/frontend/status.md`
+3. Include cross-team status only when explicitly requested by the user.
 
 ### 5. Move
 
 1. Locate issue file.
-2. Move between `queue/`, `active/`, `completed/`.
-3. Update issue status metadata in file body.
-4. If moving to `completed/`, this is mandatory:
-   - set `Status` to `COMPLETE` in the issue file before/with the move
-   - ensure the final path is `dev_communication/<team>/issues/completed/`
+2. Select target folder: `queue/`, `active/`, or `completed/`.
+3. Apply strict folder-status mapping before/with move:
+   - `queue/` -> `Status: QUEUE`
+   - `active/` -> `Status: ACTIVE`
+   - `completed/` -> `Status: COMPLETE`
+4. Move file into matching folder in the same action as status update.
 5. Do not leave completed work in `queue/` or `active/`.
 
 ### 6. Archive

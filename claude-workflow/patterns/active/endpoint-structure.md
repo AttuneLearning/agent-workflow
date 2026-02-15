@@ -154,8 +154,8 @@ export class {Feature}Service {
 ## Register in app.ts
 
 ```typescript
-import {feature}Routes from './routes/v2/{feature}.routes';
-app.use('/api/v2/{resource}', {feature}Routes);
+import {feature}Routes from './routes/{feature}.routes';
+app.use('/{resource}', {feature}Routes);
 ```
 
 ## Checklist

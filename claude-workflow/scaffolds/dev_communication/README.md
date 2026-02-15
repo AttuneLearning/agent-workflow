@@ -50,5 +50,5 @@ dev_communication/
 ## Symlink Setup (Non-API Projects)
 
 ```bash
-ln -s ../cadencelms_api/dev_communication dev_communication
+ln -s ../<api_project_root>/dev_communication dev_communication
 ```

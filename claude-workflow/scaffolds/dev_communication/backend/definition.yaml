@@ -29,3 +29,14 @@ stack:
 conventions:
   issue_prefix: API-ISS
   branch_prefix: api/
+
+# Optional: Sub-team identities that share this team's inbox/issues
+sub_teams:
+  backend-dev:
+    name: ""            # e.g., Backend-Dev
+    function: dev       # dev | qa
+    issue_prefix: ""    # e.g., API-ISS
+  backend-qa:
+    name: ""            # e.g., Backend-QA
+    function: qa        # dev | qa
+    issue_prefix: ""    # e.g., BQA

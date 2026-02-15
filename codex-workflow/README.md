@@ -28,6 +28,9 @@ Unified setup entrypoint (recommended):
 ```bash
 # run Claude setup + Codex install in one command
 ./agent-coord-setup.sh --team backend
+
+# or let installer auto-detect team from dev_communication definitions
+./agent-coord-setup.sh
 ```
 
 Use the installer and select a team profile:
@@ -38,6 +41,12 @@ Use the installer and select a team profile:
 
 # install for backend team (default target: ~/.codex/skills/codex-workflow)
 ./.codex-workflow/install.sh --team backend
+
+# detect team from current repository and print it
+./.codex-workflow/install.sh --detect-team --workspace-root .
+
+# install using auto-detected team
+./.codex-workflow/install.sh --auto-team --workspace-root .
 
 # install for data warehousing to custom target
 ./.codex-workflow/install.sh --team data-warehousing --target /tmp/codex-skills/dw-pack
@@ -57,12 +66,18 @@ Installer behavior:
   - `./ai_team_config/<team>/context_store/`
   - `./ai_team_config/<team>/skill_store/<skill>/memory_store/`
 - Ensures `TEAM_CONFIG_CONTRACT.md` exists at project root.
+- If `dev_communication/shared/registry.yaml` and team definitions exist, installer overlays static `profiles.json` with repository-specific values:
+  - team name/alias/issue prefix
+  - inbox/issues default paths
+  - cross-team inbox mapping
+  - sub-team metadata and role guidance links
 
 Team definitions are maintained in:
 
 - `.codex-workflow/teams/catalog.yaml` (role catalog translation)
 - `.codex-workflow/teams/protocol.yaml` (cross-team protocol translation)
 - `.codex-workflow/teams/profiles.json` (Codex installer profiles and defaults)
+- `dev_communication/shared/registry.yaml` + `dev_communication/*/definition.yaml` (repository-specific overlays)
 
 ## Usage style in Codex
 

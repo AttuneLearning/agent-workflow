@@ -18,6 +18,10 @@ Manage inter-team communication, issues, and coordination.
 
 Based on the user's request or argument, perform one of these actions:
 
+Header normalization for new messages:
+- Use exact sub-team values in `From`/`To`: `Backend-Dev`, `Backend-QA`, `Frontend-Dev`, `Frontend-QA`.
+- Avoid generic labels such as `API Team` or `UI Team` in newly authored messages.
+
 ---
 
 ### 1. CHECK (default if no action specified)
@@ -30,9 +34,11 @@ Check inbox, pending issues, and team status.
 1. List files in `dev_communication/backend/inbox/` (API team's inbox — messages from UI)
 2. List files in `dev_communication/backend/issues/queue/`
 3. List files in `dev_communication/backend/issues/active/`
-4. List files in `dev_communication/frontend/inbox/` (UI team's inbox — messages from API)
-5. List files in `dev_communication/frontend/issues/queue/`
-6. List files in `dev_communication/frontend/issues/active/`
+
+Project policy:
+- Default check scope is team-local only.
+- In API/backend projects, `/comms` checks only backend inbox/issues by default.
+- Include frontend/cross-team folders only when explicitly requested by the user.
 
 **Output format:**
 ```
@@ -62,6 +68,8 @@ Check inbox, pending issues, and team status.
 - [ISS-xxx] - [title] - [status]
 - (or "No active issues")
 ```
+
+Note: frontend sections are optional and should only be emitted when user explicitly asks for cross-team status.
 
 ---
 
@@ -101,12 +109,14 @@ Create a new issue.
 3. Use template from `dev_communication/templates/issue-template.md`
 4. Generate filename: `{TEAM}-ISS-{NNN}_{title_slug}.md`
 5. Save to `dev_communication/backend/issues/queue/` (API issues) or `dev_communication/frontend/issues/queue/` (UI issues)
-6. Confirm created
+6. Set `Status: QUEUE` in issue metadata
+7. Confirm created
 
 **For cross-team issues:**
-1. Also create in other team's queue if their work needed
-2. Link with `Related:` field
-3. Send notification message to the other team's inbox
+1. Keep issue ownership local by default (create in your team's queue)
+2. Send cross-team message to the other team's inbox for dependency/request tracking
+3. Link with `Related:` field
+4. If the user explicitly requests a mirrored issue in the other team queue, create it and cross-link both issues
 
 ---
 
@@ -117,13 +127,14 @@ Update team status.
 **Trigger:** `/comms status`, "update status", "set focus"
 
 **Steps:**
-1. Review current active issues in `dev_communication/backend/issues/active/` and `dev_communication/frontend/issues/active/`
+1. Review current active issues for the active team by default.
 2. Ask what to update:
    - Current focus
    - Active issues
    - Blockers
    - Notes
-3. Confirm updated
+3. Update active team status file (`dev_communication/backend/status.md` or `dev_communication/frontend/status.md`).
+4. Include cross-team status updates only when explicitly requested by the user.
 
 ---
 
@@ -136,19 +147,21 @@ Move an issue through lifecycle.
 **Steps:**
 1. Find the issue file
 2. Ask target status: queue, active, completed
-3. Update status field in the issue
-4. Move file to appropriate folder
+3. Apply strict folder-status mapping:
+   - `queue` -> `Status: QUEUE` and path `issues/queue/`
+   - `active` -> `Status: ACTIVE` and path `issues/active/`
+   - `completed` -> `Status: COMPLETE` and path `issues/completed/`
+4. Update status field and move file in the same action
 5. If completing:
    - Ask for completion notes
    - Update completion section
-   - Set `Status: COMPLETE` in the issue file
-   - Move the issue file into `issues/completed/` in the same action
    - If cross-team, ask if response message needed
 6. Confirm moved
 
 **Completion rule (mandatory):**
 - Completed issues must not remain in `queue/` or `active/`.
 - Completion is only valid after both status update and move to `completed/`.
+- Folder and status values must always match (`QUEUE`, `ACTIVE`, `COMPLETE`).
 
 ---
 
@@ -195,9 +208,9 @@ dev_communication/
 
 ## Team Context
 
-Determine team from project context (check CLAUDE.md or project name):
-- API project (cadencelms_api): team=backend, other-team=frontend
-- UI project (cadencelms_ui): team=frontend, other-team=backend
+Determine team from active workflow config:
+- Read `.codex-workflow/config/active-team.json` (or local equivalent) for current team and paths.
+- If unavailable, infer from repository `dev_communication/<team>/` structure.
 
 ## Auto-Suggestions
 

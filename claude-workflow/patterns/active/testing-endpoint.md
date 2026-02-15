@@ -54,10 +54,10 @@ describeIfMongo('{Feature} API', () => {
     // Clean collections
   });
 
-  describe('GET /api/v2/{resource}', () => {
+  describe('GET /{resource}', () => {
     it('returns 200 with list', async () => {
       const res = await request(app)
-        .get('/api/v2/{resource}')
+        .get('/{resource}')
         .set('Authorization', `Bearer ${authToken}`);
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('success');
@@ -65,31 +65,31 @@ describeIfMongo('{Feature} API', () => {
     });
 
     it('returns 401 without auth', async () => {
-      const res = await request(app).get('/api/v2/{resource}');
+      const res = await request(app).get('/{resource}');
       expect(res.status).toBe(401);
     });
   });
 
-  describe('GET /api/v2/{resource}/:id', () => {
+  describe('GET /{resource}/:id', () => {
     it('returns 200 for valid id', async () => {
       const res = await request(app)
-        .get(`/api/v2/{resource}/${testData.id}`)
+        .get(`/{resource}/${testData.id}`)
         .set('Authorization', `Bearer ${authToken}`);
       expect(res.status).toBe(200);
     });
 
     it('returns 404 for non-existent', async () => {
       const res = await request(app)
-        .get('/api/v2/{resource}/000000000000000000000000')
+        .get('/{resource}/000000000000000000000000')
         .set('Authorization', `Bearer ${authToken}`);
       expect(res.status).toBe(404);
     });
   });
 
-  describe('POST /api/v2/{resource}', () => {
+  describe('POST /{resource}', () => {
     it('returns 201 with valid data', async () => {
       const res = await request(app)
-        .post('/api/v2/{resource}')
+        .post('/{resource}')
         .set('Authorization', `Bearer ${authToken}`)
         .send({ /* valid data */ });
       expect(res.status).toBe(201);
@@ -97,7 +97,7 @@ describeIfMongo('{Feature} API', () => {
 
     it('returns 422 for invalid data', async () => {
       const res = await request(app)
-        .post('/api/v2/{resource}')
+        .post('/{resource}')
         .set('Authorization', `Bearer ${authToken}`)
         .send({ /* invalid data */ });
       expect(res.status).toBe(422);

@@ -6,6 +6,7 @@
     "name": "Backend",
     "alias": "api",
     "issue_prefix": "API-ISS",
+    "comms_check_scope": "team-only",
     "enabled_skills": ["comms", "adr", "memory", "context", "reflect", "refine"],
     "default_paths": {
       "inbox": "dev_communication/backend/inbox",
@@ -20,4 +21,3 @@
   "source_workflow_root": "/path/to/project/.codex-workflow",
   "project_root": "/path/to/project"
 }
-

@@ -16,6 +16,13 @@ active_teams:
     role: backend
     repo: your_api_repo
     definition: backend/definition.yaml
+    sub_teams:
+      - id: backend-dev
+        name: Backend-Dev
+        function: dev
+      - id: backend-qa
+        name: Backend-QA
+        function: qa
 
   - id: frontend
     name: Frontend
@@ -23,7 +30,18 @@ active_teams:
     role: frontend
     repo: your_ui_repo
     definition: frontend/definition.yaml
+    sub_teams:
+      - id: frontend-dev
+        name: Frontend-Dev
+        function: dev
+      - id: frontend-qa
+        name: Frontend-QA
+        function: qa
 
 aliases:
   api: backend
   ui: frontend
+  backend-dev: backend
+  backend-qa: backend
+  frontend-dev: frontend
+  frontend-qa: frontend

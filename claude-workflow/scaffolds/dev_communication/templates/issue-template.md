@@ -3,7 +3,8 @@
 **Priority:** Critical | High | Medium | Low
 **Status:** QUEUE
 **Created:** YYYY-MM-DD
-**From:** {team or user}
+**Requested By:** {TeamName}-Dev | {TeamName}-QA | {team or user}
+**Assigned To:** {TeamName}-Dev | {TeamName}-QA | Unassigned | {agent name}
 
 ## Description
 
@@ -22,3 +23,8 @@
 
 **Completed:** (date)
 **Notes:** (what was done)
+
+**Folder-status mapping (mandatory):**
+- `issues/queue/` -> `Status: QUEUE`
+- `issues/active/` -> `Status: ACTIVE`
+- `issues/completed/` -> `Status: COMPLETE`
